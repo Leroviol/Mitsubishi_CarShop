@@ -1,8 +1,6 @@
-package org.example.users;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import users.User;
+import users.UsersManager;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,12 +39,14 @@ class UsersManagerTest {
 
     @Test
     void getUserInfo() {
-        String userAdmin = "Ваши персональные данные: " + "\n" +
-                "Имя: " + "Иван" + "\n" +
-                "Фамилия: " + "Иванов" + "\n" +
-                "Номер телефона: " + "+12345678900" + "\n" +
-                "Логин: " + "admin" + "\n" +
-                "Пароль: " + "qwerty" + "\n";
+        String userAdmin = """
+                Ваши персональные данные:
+                Имя: Иван
+                Фамилия: Иванов
+                Номер телефона: +12345678900
+                Логин: admin
+                Пароль: qwerty
+                """;
         usersManager.signin("admin", "qwerty");
         assertEquals(userAdmin, usersManager.getUserInfo());
         assertEquals("Сессия успешно закончена", usersManager.logout());

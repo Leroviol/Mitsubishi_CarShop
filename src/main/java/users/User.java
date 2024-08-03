@@ -1,4 +1,4 @@
-package org.example.users;
+package users;
 
 public class User{
     private String firstName, secondName, phoneNumber;

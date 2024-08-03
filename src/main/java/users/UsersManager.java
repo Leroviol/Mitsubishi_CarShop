@@ -1,6 +1,4 @@
-package org.example.users;
-
-import org.example.users.User.*;
+package users;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +9,7 @@ public class UsersManager {
     public UsersManager(){
         users = new HashMap<>();
         users.put("admin", new User("Иван", "Иванов", "admin", "qwerty",
-                "+12345678900", UserType.ADMINISTRATOR));
+                "+12345678900", User.UserType.ADMINISTRATOR));
     }
     public String signin(String login, String password){
         if (users.containsKey(login) && users.get(login).getPassword().equals(password)){
@@ -27,7 +25,7 @@ public class UsersManager {
     }
     public String createUser(String firstName, String secondName,
                              String login, String password,
-                             String phoneNumber, UserType userType){
+                             String phoneNumber, User.UserType userType){
         if (!users.containsKey(login))
         {
             users.put(login, new User(firstName, secondName, login, password, phoneNumber, userType));
@@ -36,20 +34,20 @@ public class UsersManager {
         else return "Данный логин уже занят";
     }
     public String getUserInfo(String firstName, String secondName){
-        if (currentUser != null && currentUser.getUserType() != UserType.CUSTOMER){
+        if (currentUser != null && currentUser.getUserType() != User.UserType.CUSTOMER){
             ArrayList<User> usersList = getUsers(firstName, secondName);
             if (!usersList.isEmpty()){
                 String response = "\n";
-                if (currentUser.getUserType() == UserType.ADMINISTRATOR){ //админ видит всех пользователей в списке
+                if (currentUser.getUserType() == User.UserType.ADMINISTRATOR){ //админ видит всех пользователей в списке
                     for (User user : usersList) {
                         response += "Имя: " + user.getFirstName() + "\n" +
                                 "Фамилия: " + user.getSecondName() + "\n" +
                                 "Номер телефона: " + user.getPhoneNumber() + "\n" +
                                 "Должность: " + user.getUserType() + "\n";
                     }
-                } else if (currentUser.getUserType() == UserType.MANAGER){ //манагер видит только список покупателей
+                } else if (currentUser.getUserType() == User.UserType.MANAGER){ //манагер видит только список покупателей
                     for (User user : usersList) {
-                        if (user.getUserType() == UserType.CUSTOMER){
+                        if (user.getUserType() == User.UserType.CUSTOMER){
                             response += "Имя: " + user.getFirstName() + "\n" +
                                     "Фамилия: " + user.getSecondName() + "\n" +
                                     "Номер телефона: " + user.getPhoneNumber() + "\n" +
@@ -61,7 +59,7 @@ public class UsersManager {
                 else return "Данный пользователь не найден";
 
             } else return "Данный пользователь не найден";
-        } else if (currentUser != null && currentUser.getUserType() == UserType.CUSTOMER){
+        } else if (currentUser != null && currentUser.getUserType() == User.UserType.CUSTOMER){
             return "Недостаточно прав для данного действия";
         } else return "Для данного действия требуется авторизация";
     }
@@ -77,7 +75,7 @@ public class UsersManager {
 
     public String getUserInfo(){
         if (currentUser != null) {
-            return "Ваши персональные данные: " + "\n" +
+            return "Ваши персональные данные:" + "\n" +
                     "Имя: " + currentUser.getFirstName() + "\n" +
                     "Фамилия: " + currentUser.getSecondName() + "\n" +
                     "Номер телефона: " + currentUser.getPhoneNumber() + "\n" +
