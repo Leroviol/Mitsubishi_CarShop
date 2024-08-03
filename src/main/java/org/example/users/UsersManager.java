@@ -13,47 +13,41 @@ public class UsersManager {
         users.put("admin", new User("Иван", "Иванов", "admin", "qwerty",
                 "+12345678900", UserType.ADMINISTRATOR));
     }
-    public void signin(String login, String password){
+    public String signin(String login, String password){
         if (users.containsKey(login) && users.get(login).getPassword().equals(password)){
             currentUser = users.get(login);
-            System.out.println("Доброго времени суток, " + currentUser.getFirstName() + ".");
-        } else System.out.println("Введены неверные имя пользователя или пароль");
+            return "Доброго времени суток, " + currentUser.getFirstName() + ".";
+        } else return "Введены неверные имя пользователя или пароль";
     }
-    public void logout(){
+    public String logout(){
         if (currentUser != null) {
             currentUser = null;
-            System.out.println("Сессия успешно закончена");
-        } else System.out.println("Нет активных сессий");
+            return "Сессия успешно закончена";
+        } else return "Нет активных сессий";
     }
-    public void createUser(String firstName, String secondName,
+    public String createUser(String firstName, String secondName,
                              String login, String password,
                              String phoneNumber, UserType userType){
         if (!users.containsKey(login))
         {
             users.put(login, new User(firstName, secondName, login, password, phoneNumber, userType));
-            System.out.println("Пользователь успешно зарегестрирован");
+            return "Пользователь успешно зарегестрирован";
         }
-        else System.out.println("Данный логин уже занят");
+        else return "Данный логин уже занят";
     }
-    public void getUserInfo(String firstName, String secondName){
+    public String getUserInfo(String firstName, String secondName){
         if (currentUser != null && currentUser.getUserType() != UserType.CUSTOMER){
-            ArrayList<User> usersList = new ArrayList<>();
-            for (User value : users.values()) {
-                if (value.getFirstName().equals(firstName) && value.getSecondName().equals(secondName))
-                    usersList.add(value);
-            }
+            ArrayList<User> usersList = getUsers(firstName, secondName);
             if (!usersList.isEmpty()){
                 String response = "\n";
-                if (currentUser.getUserType() == UserType.ADMINISTRATOR){
+                if (currentUser.getUserType() == UserType.ADMINISTRATOR){ //админ видит всех пользователей в списке
                     for (User user : usersList) {
                         response += "Имя: " + user.getFirstName() + "\n" +
                                 "Фамилия: " + user.getSecondName() + "\n" +
                                 "Номер телефона: " + user.getPhoneNumber() + "\n" +
-                                "Должность: " + user.getUserType() + "\n" +
-                                "Логин: " + user.getLogin() + "\n" +
-                                "Пароль: " + user.getPassword() + "\n";
+                                "Должность: " + user.getUserType() + "\n";
                     }
-                } else if (currentUser.getUserType() == UserType.MANAGER){
+                } else if (currentUser.getUserType() == UserType.MANAGER){ //манагер видит только список покупателей
                     for (User user : usersList) {
                         if (user.getUserType() == UserType.CUSTOMER){
                             response += "Имя: " + user.getFirstName() + "\n" +
@@ -63,20 +57,32 @@ public class UsersManager {
                         }
                     }
                 }
-                if (response.length() > 2) System.out.println(response);
-                else System.out.println("Данный пользователь не найден");
+                if (response.length() > 2) return response;
+                else return "Данный пользователь не найден";
 
-            } else System.out.println("Данный пользователь не найден");
+            } else return "Данный пользователь не найден";
         } else if (currentUser != null && currentUser.getUserType() == UserType.CUSTOMER){
-            System.out.println("Недостаточно прав для данного действия");
-        } else System.out.println("Для данного действия требуется авторизация");
+            return "Недостаточно прав для данного действия";
+        } else return "Для данного действия требуется авторизация";
     }
-    public void getUserInfo(){
+
+    private ArrayList<User> getUsers(String firstName, String secondName) {
+        ArrayList<User> usersList = new ArrayList<>();
+        for (User value : users.values()) {
+            if (value.getFirstName().equals(firstName) && value.getSecondName().equals(secondName))
+                usersList.add(value);
+        }
+        return usersList;
+    }
+
+    public String getUserInfo(){
         if (currentUser != null) {
-            System.out.println(("Ваши персональные данные: " + "\n" +
+            return "Ваши персональные данные: " + "\n" +
                     "Имя: " + currentUser.getFirstName() + "\n" +
                     "Фамилия: " + currentUser.getSecondName() + "\n" +
-                    "Номер телефона: " + currentUser.getPhoneNumber() + "\n"));
-        } else System.out.println("Для данного действия требуется авторизация");
+                    "Номер телефона: " + currentUser.getPhoneNumber() + "\n" +
+                    "Логин: " + currentUser.getLogin() + "\n" +
+                    "Пароль: " + currentUser.getPassword() + "\n";
+        } else return "Для данного действия требуется авторизация";
     }
 }
