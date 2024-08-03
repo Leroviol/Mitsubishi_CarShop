@@ -13,30 +13,29 @@ public class UsersManager {
         users.put("admin", new User("Иван", "Иванов", "admin", "qwerty",
                 "+12345678900", UserType.ADMINISTRATOR));
     }
-    public String signin(String login, String password){
+    public void signin(String login, String password){
         if (users.containsKey(login) && users.get(login).getPassword().equals(password)){
             currentUser = users.get(login);
-            return "Доброго времени суток, " + currentUser.getFirstName() + ".";
-        } else return "Введены неверные имя пользователя или пароль";
+            System.out.println("Доброго времени суток, " + currentUser.getFirstName() + ".");
+        } else System.out.println("Введены неверные имя пользователя или пароль");
     }
-    public String logout(){
+    public void logout(){
         if (currentUser != null) {
             currentUser = null;
-            return "Сессия успешно закончена";
-        }
-        return "Нет активных сессий";
+            System.out.println("Сессия успешно закончена");
+        } else System.out.println("Нет активных сессий");
     }
-    public String createUser(String firstName, String secondName,
+    public void createUser(String firstName, String secondName,
                              String login, String password,
                              String phoneNumber, UserType userType){
         if (!users.containsKey(login))
         {
-            users.put(login, new User(firstName, secondName, password, phoneNumber, login, userType));
-            return "Пользователь успешно зарегестрирован";
+            users.put(login, new User(firstName, secondName, login, password, phoneNumber, userType));
+            System.out.println("Пользователь успешно зарегестрирован");
         }
-        else return "Данный логин уже занят";
+        else System.out.println("Данный логин уже занят");
     }
-    public String getUserInfo(String firstName, String secondName){
+    public void getUserInfo(String firstName, String secondName){
         if (currentUser != null && currentUser.getUserType() != UserType.CUSTOMER){
             ArrayList<User> usersList = new ArrayList<>();
             for (User value : users.values()) {
@@ -50,7 +49,7 @@ public class UsersManager {
                         response += "Имя: " + user.getFirstName() + "\n" +
                                 "Фамилия: " + user.getSecondName() + "\n" +
                                 "Номер телефона: " + user.getPhoneNumber() + "\n" +
-                                "Статус: " + user.getUserType() + "\n" +
+                                "Должность: " + user.getUserType() + "\n" +
                                 "Логин: " + user.getLogin() + "\n" +
                                 "Пароль: " + user.getPassword() + "\n";
                     }
@@ -64,15 +63,20 @@ public class UsersManager {
                         }
                     }
                 }
-                if (response.length() > 2) return response;
-                else return "Данный пользователь не найден";
+                if (response.length() > 2) System.out.println(response);
+                else System.out.println("Данный пользователь не найден");
 
-            } else return "Данный пользователь не найден";
+            } else System.out.println("Данный пользователь не найден");
         } else if (currentUser != null && currentUser.getUserType() == UserType.CUSTOMER){
-            return "Ваши персональные данные: " + "\n" +
+            System.out.println("Недостаточно прав для данного действия");
+        } else System.out.println("Для данного действия требуется авторизация");
+    }
+    public void getUserInfo(){
+        if (currentUser != null) {
+            System.out.println(("Ваши персональные данные: " + "\n" +
                     "Имя: " + currentUser.getFirstName() + "\n" +
                     "Фамилия: " + currentUser.getSecondName() + "\n" +
-                    "Номер телефона: " + currentUser.getPhoneNumber() + "\n";
-        } else return "Для данного действия требуется авторизация";
+                    "Номер телефона: " + currentUser.getPhoneNumber() + "\n"));
+        } else System.out.println("Для данного действия требуется авторизация");
     }
 }
