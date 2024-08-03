@@ -29,12 +29,15 @@ class UsersManagerTest {
 
     @Test
     void createUser() {
-        String success = "Пользователь успешно зарегестрирован";
-        String bad = "Данный логин уже занят";
-        assertEquals(success, usersManager.createUser("123", "132", "root", "qwertyy",
-                "4565732637", User.UserType.MANAGER));
-        assertEquals(bad, usersManager.createUser("gfsa", "1rha32", "root", "qwerthjryy",
+        assertTrue(usersManager.createUser("gfsa", "1rha32", "root", "qwerthjryy",
                 "456575332637", User.UserType.CUSTOMER));
+        assertFalse(usersManager.createUser("123", "132", "root", "qwertyy",
+                "4565732637", User.UserType.MANAGER));
+        usersManager.signin("admin", "qwerty");
+        assertFalse(usersManager.createUser("123", "132", "root", "qwertyy",
+                "4565732637", User.UserType.MANAGER));
+        assertTrue(usersManager.createUser("123", "132", "root1", "qwertyy",
+                "4565732637", User.UserType.MANAGER));
     }
 
     @Test
