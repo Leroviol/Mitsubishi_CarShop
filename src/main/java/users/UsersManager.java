@@ -23,15 +23,23 @@ public class UsersManager {
             return "Сессия успешно закончена";
         } else return "Нет активных сессий";
     }
-    public String createUser(String firstName, String secondName,
+    public boolean createUser(String firstName, String secondName,
                              String login, String password,
                              String phoneNumber, User.UserType userType){
+        if((userType == User.UserType.MANAGER || userType == User.UserType.ADMINISTRATOR) && currentUser == null){
+            System.out.println("Авторизуйтесь для данного действия");
+            return false;
+        }
         if (!users.containsKey(login))
         {
             users.put(login, new User(firstName, secondName, login, password, phoneNumber, userType));
-            return "Пользователь успешно зарегестрирован";
+            System.out.println("Пользователь успешно зарегестрирован");
+            return true;
         }
-        else return "Данный логин уже занят";
+        else {
+            System.out.println("Данный логин уже занят");
+            return false;
+        }
     }
     public String getUserInfo(String firstName, String secondName){
         if (currentUser != null && currentUser.getUserType() != User.UserType.CUSTOMER){
