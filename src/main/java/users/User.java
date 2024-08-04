@@ -1,5 +1,7 @@
 package users;
 
+import java.util.ArrayList;
+
 public class User{
     private String firstName, secondName, phoneNumber;
     private String login;
