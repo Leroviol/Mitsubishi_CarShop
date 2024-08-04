@@ -5,7 +5,7 @@ public class Car {
     private int price, yearOfProduction;
     private Condition condition;
 
-    public Car(String brand, String model, int price, int yearOfProduction, Condition condition) {
+    public Car(String brand, String model, int yearOfProduction, int price, Condition condition) {
         this.brand = brand;
         this.model = model;
         this.price = price;
@@ -45,6 +45,12 @@ public class Car {
 
     public void setCondition(Condition condition) {
         this.condition = condition;
+    }
+
+    @Override
+    public String toString() {
+        return brand + " " + model + " Год выпуска: " + yearOfProduction +
+                " Состояние: " + condition + " Цена: " + price;
     }
 
     public enum Condition {
